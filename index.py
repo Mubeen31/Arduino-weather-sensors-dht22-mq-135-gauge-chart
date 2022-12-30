@@ -14,7 +14,7 @@ server = app.server
 app.layout = html.Div([
 
     dcc.Interval(id='update_value',
-                 interval=1 * 11000,
+                 interval=1 * 1000,
                  n_intervals=0),
 
     html.Div([
@@ -80,7 +80,7 @@ def update_confirmed(n_intervals):
         #              """
         # df = pd1.read_gbq(df_sql, project_id=project_id, dialect='standard', credentials=credentials)
         df = pd.read_csv('data.csv')
-        get_temp = df['OutsideTemperature'].head(1).iloc[0]
+        get_temp = df['OutsideTemperature'].tail(1).iloc[0]
 
     return {
         'data': [go.Indicator(
@@ -130,7 +130,7 @@ def update_confirmed(n_intervals):
         #              """
         # df = pd1.read_gbq(df_sql, project_id=project_id, dialect='standard', credentials=credentials)
         df = pd.read_csv('data.csv')
-        get_temp = df['OutsideTemperature'].head(1).iloc[0]
+        get_temp = df['OutsideTemperature'].tail(1).iloc[0]
 
     return [
         html.Div('{0:.1f} °C'.format(get_temp),
@@ -155,7 +155,7 @@ def update_confirmed(n_intervals):
         #              """
         # df = pd1.read_gbq(df_sql, project_id=project_id, dialect='standard', credentials=credentials)
         df = pd.read_csv('data.csv')
-        get_hum = df['OutsideHumidity'].head(1).iloc[0]
+        get_hum = df['OutsideHumidity'].tail(1).iloc[0]
 
     return {
         'data': [go.Indicator(
@@ -205,7 +205,7 @@ def update_confirmed(n_intervals):
         #              """
         # df = pd1.read_gbq(df_sql, project_id=project_id, dialect='standard', credentials=credentials)
         df = pd.read_csv('data.csv')
-        get_hum = df['OutsideHumidity'].head(1).iloc[0]
+        get_hum = df['OutsideHumidity'].tail(1).iloc[0]
 
     return [
         html.Div('{0:.1f} %'.format(get_hum),
@@ -234,8 +234,8 @@ def line_chart_values(n_intervals):
 
     return {
         'data': [go.Scatter(
-            x=df['DateTime'].head(15),
-            y=df['OutsideTemperature'].head(15),
+            x=df['DateTime'].tail(15),
+            y=df['OutsideTemperature'].tail(15),
             mode='markers+lines',
             line=dict(width=3, color='#1EEC11'),
             marker=dict(size=7, symbol='circle', color='#1EEC11',
@@ -243,8 +243,8 @@ def line_chart_values(n_intervals):
                         ),
             hoverinfo='text',
             hovertext=
-            '<b>Date Time</b>: ' + df['DateTime'].head(15).astype(str) + '<br>' +
-            '<b>Temperature (°C)</b>: ' + [f'{x:,.2f} °C' for x in df['OutsideTemperature'].head(15)] + '<br>'
+            '<b>Date Time</b>: ' + df['DateTime'].tail(15).astype(str) + '<br>' +
+            '<b>Temperature (°C)</b>: ' + [f'{x:,.2f} °C' for x in df['OutsideTemperature'].tail(15)] + '<br>'
         )],
 
         'layout': go.Layout(
@@ -275,7 +275,7 @@ def line_chart_values(n_intervals):
 
                        ),
 
-            yaxis=dict(range=[min(df['OutsideTemperature'].head(15)) - 0.05, max(df['OutsideTemperature'].head(15)) + 0.05],
+            yaxis=dict(range=[min(df['OutsideTemperature'].tail(15)) - 0.05, max(df['OutsideTemperature'].tail(15)) + 0.05],
                        title='<b>Temperature (°C)</b>',
                        color='#ffffff',
                        zeroline=False,
@@ -321,8 +321,8 @@ def line_chart_values(n_intervals):
 
     return {
         'data': [go.Scatter(
-            x=df['DateTime'].head(15),
-            y=df['OutsideHumidity'].head(15),
+            x=df['DateTime'].tail(15),
+            y=df['OutsideHumidity'].tail(15),
             mode='markers+lines',
             line=dict(width=3, color='#DFFF00'),
             marker=dict(size=7, symbol='circle', color='#DFFF00',
@@ -330,8 +330,8 @@ def line_chart_values(n_intervals):
                         ),
             hoverinfo='text',
             hovertext=
-            '<b>Date Time</b>: ' + df['DateTime'].head(15).astype(str) + '<br>' +
-            '<b>Temperature (°C)</b>: ' + [f'{x:,.2f} °C' for x in df['OutsideHumidity'].head(15)] + '<br>'
+            '<b>Date Time</b>: ' + df['DateTime'].tail(15).astype(str) + '<br>' +
+            '<b>Temperature (°C)</b>: ' + [f'{x:,.2f} °C' for x in df['OutsideHumidity'].tail(15)] + '<br>'
         )],
 
         'layout': go.Layout(
@@ -362,7 +362,7 @@ def line_chart_values(n_intervals):
 
                        ),
 
-            yaxis=dict(range=[min(df['OutsideHumidity'].head(15)) - 0.05, max(df['OutsideHumidity'].head(15)) + 0.05],
+            yaxis=dict(range=[min(df['OutsideHumidity'].tail(15)) - 0.05, max(df['OutsideHumidity'].tail(15)) + 0.05],
                        title='<b>Humidity (%)</b>',
                        color='#ffffff',
                        zeroline=False,
