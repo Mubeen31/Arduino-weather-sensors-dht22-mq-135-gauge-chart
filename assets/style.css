@@ -3,6 +3,43 @@ body {
   margin: 0;
 }
 
+.location {
+  display: flex;
+  flex-direction: row;
+  color: white;
+  font-family: sans-serif;
+  font-size: 15px;
+}
+
+.date_id {
+  display: flex;
+  flex-direction: row;
+}
+
+.date_format {
+  display: flex;
+  flex-direction: row;
+  color: #bfbfbf;
+  font-family: sans-serif;
+  font-size: 15px;
+}
+
+.location_date_time {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: -2px;
+}
+
+.nav_title {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+}
+
 .title_image {
   display: flex;
   flex-direction: row;

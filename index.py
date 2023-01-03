@@ -7,6 +7,7 @@ from google.oauth2 import service_account
 import pandas_gbq as pd1
 import plotly.graph_objs as go
 import csv
+import dash_bootstrap_components as dbc
 
 app = dash.Dash(__name__, )
 server = app.server
@@ -19,13 +20,23 @@ app.layout = html.Div([
 
     html.Div([
         html.Div([
-            html.Img(src=app.get_asset_url('sensor.png'),
-                     style={'height': '30px'},
-                     className='title_image'
-                     ),
-            html.Div('ARDUINO WEATHER SENSORS',
-                     className='title_text')
-        ], className='title_row')
+            html.Div([
+                html.Img(src=app.get_asset_url('sensor.png'),
+                         style={'height': '30px'},
+                         className='title_image'
+                         ),
+                html.Div('ARDUINO WEATHER SENSORS',
+                         className='title_text')
+            ], className='title_row'),
+
+            html.Div([
+                html.Div('Sensors Location: Walsall, England',
+                         className='location'),
+
+                dbc.Spinner(html.Div(id='date',
+                                     className='date_id'))
+            ], className='location_date_time')
+        ], className='nav_title'),
     ], className='bg_title'),
 
     html.Div([
@@ -220,35 +231,36 @@ def line_chart_values(n_intervals):
                 'size': 17},
             margin=dict(t=50, r=10),
             xaxis=dict(
-                       title='<b>Hours</b>',
-                       color='#ffffff',
-                       showline=True,
-                       showgrid=True,
-                       linecolor='#ffffff',
-                       linewidth=1,
-                       ticks='outside',
-                       tickfont=dict(
-                           family='Arial',
-                           size=12,
-                           color='#ffffff')
+                title='<b>Hours</b>',
+                color='#ffffff',
+                showline=True,
+                showgrid=True,
+                linecolor='#ffffff',
+                linewidth=1,
+                ticks='outside',
+                tickfont=dict(
+                    family='Arial',
+                    size=12,
+                    color='#ffffff')
 
-                       ),
+            ),
 
-            yaxis=dict(range=[min(df3['OutsideTemperature'].head(15)) - 0.05, max(df3['OutsideTemperature'].head(15)) + 0.05],
-                       title='<b>Temperature (°C)</b>',
-                       color='#ffffff',
-                       zeroline=False,
-                       showline=True,
-                       showgrid=True,
-                       linecolor='#ffffff',
-                       linewidth=1,
-                       ticks='outside',
-                       tickfont=dict(
-                           family='Arial',
-                           size=12,
-                           color='#ffffff')
+            yaxis=dict(
+                range=[min(df3['OutsideTemperature'].head(15)) - 0.05, max(df3['OutsideTemperature'].head(15)) + 0.05],
+                title='<b>Temperature (°C)</b>',
+                color='#ffffff',
+                zeroline=False,
+                showline=True,
+                showgrid=True,
+                linecolor='#ffffff',
+                linewidth=1,
+                ticks='outside',
+                tickfont=dict(
+                    family='Arial',
+                    size=12,
+                    color='#ffffff')
 
-                       ),
+            ),
             font=dict(
                 family="sans-serif",
                 size=12,
@@ -295,19 +307,19 @@ def line_chart_values(n_intervals):
                 'size': 17},
             margin=dict(t=50, r=10),
             xaxis=dict(
-                       title='<b>Hours</b>',
-                       color='#ffffff',
-                       showline=True,
-                       showgrid=True,
-                       linecolor='#ffffff',
-                       linewidth=1,
-                       ticks='outside',
-                       tickfont=dict(
-                           family='Arial',
-                           size=12,
-                           color='#ffffff')
+                title='<b>Hours</b>',
+                color='#ffffff',
+                showline=True,
+                showgrid=True,
+                linecolor='#ffffff',
+                linewidth=1,
+                ticks='outside',
+                tickfont=dict(
+                    family='Arial',
+                    size=12,
+                    color='#ffffff')
 
-                       ),
+            ),
 
             yaxis=dict(range=[min(df3['OutsideHumidity'].head(15)) - 0.05, max(df3['OutsideHumidity'].head(15)) + 0.05],
                        title='<b>Humidity (%)</b>',
@@ -333,6 +345,19 @@ def line_chart_values(n_intervals):
 
     }
 
+
+@app.callback(Output('date', 'children'),
+              [Input('update_value', 'n_intervals')])
+def update_confirmed(n_intervals):
+    header = ['DateTime', 'InsideHumidity', 'InsideTemperature', 'InsideCO2',
+              'OutsideHumidity', 'OutsideTemperature', 'OutsideCO2']
+    df3 = pd.read_csv('data1.csv', names=header)
+    get_date = df3['DateTime'].tail(1).iloc[0]
+
+    return [
+        html.Div('Last Date Update Time: ' + get_date,
+                 className='date_format')
+    ]
 
 if __name__ == '__main__':
     app.run_server(debug=True)
