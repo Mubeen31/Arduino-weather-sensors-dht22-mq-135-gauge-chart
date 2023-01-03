@@ -96,7 +96,7 @@ def update_confirmed(n_intervals):
               'OutsideHumidity', 'OutsideTemperature', 'OutsideCO2']
     df3 = pd.read_csv('data1.csv', names=header)
     df3.drop_duplicates(keep=False, inplace=True)
-    get_temp = df3['OutsideTemperature'].head(1).iloc[0]
+    get_temp = df3['OutsideTemperature'].tail(1).iloc[0]
 
     return {
         'data': [go.Indicator(
@@ -136,7 +136,7 @@ def update_confirmed(n_intervals):
               'OutsideHumidity', 'OutsideTemperature', 'OutsideCO2']
     df3 = pd.read_csv('data1.csv', names=header)
     df3.drop_duplicates(keep=False, inplace=True)
-    get_temp = df3['OutsideTemperature'].head(1).iloc[0]
+    get_temp = df3['OutsideTemperature'].tail(1).iloc[0]
 
     return [
         html.Div('{0:.1f} °C'.format(get_temp),
@@ -151,7 +151,7 @@ def update_confirmed(n_intervals):
               'OutsideHumidity', 'OutsideTemperature', 'OutsideCO2']
     df3 = pd.read_csv('data1.csv', names=header)
     df3.drop_duplicates(keep=False, inplace=True)
-    get_hum = df3['OutsideHumidity'].head(1).iloc[0]
+    get_hum = df3['OutsideHumidity'].tail(1).iloc[0]
 
     return {
         'data': [go.Indicator(
@@ -191,7 +191,7 @@ def update_confirmed(n_intervals):
               'OutsideHumidity', 'OutsideTemperature', 'OutsideCO2']
     df3 = pd.read_csv('data1.csv', names=header)
     df3.drop_duplicates(keep=False, inplace=True)
-    get_hum = df3['OutsideHumidity'].head(1).iloc[0]
+    get_hum = df3['OutsideHumidity'].tail(1).iloc[0]
 
     return [
         html.Div('{0:.1f} %'.format(get_hum),
@@ -209,8 +209,8 @@ def line_chart_values(n_intervals):
 
     return {
         'data': [go.Scatter(
-            x=df3['DateTime'].head(15),
-            y=df3['OutsideTemperature'].head(15),
+            x=df3['DateTime'].tail(15),
+            y=df3['OutsideTemperature'].tail(15),
             mode='markers+lines',
             line=dict(width=3, color='#1EEC11'),
             marker=dict(size=7, symbol='circle', color='#1EEC11',
@@ -218,8 +218,8 @@ def line_chart_values(n_intervals):
                         ),
             hoverinfo='text',
             hovertext=
-            '<b>Date Time</b>: ' + df3['DateTime'].head(15).astype(str) + '<br>' +
-            '<b>Temperature (°C)</b>: ' + [f'{x:,.2f} °C' for x in df3['OutsideTemperature'].head(15)] + '<br>'
+            '<b>Date Time</b>: ' + df3['DateTime'].tail(15).astype(str) + '<br>' +
+            '<b>Temperature (°C)</b>: ' + [f'{x:,.2f} °C' for x in df3['OutsideTemperature'].tail(15)] + '<br>'
         )],
 
         'layout': go.Layout(
@@ -251,7 +251,7 @@ def line_chart_values(n_intervals):
             ),
 
             yaxis=dict(
-                range=[min(df3['OutsideTemperature'].head(15)) - 0.05, max(df3['OutsideTemperature'].head(15)) + 0.05],
+                range=[min(df3['OutsideTemperature'].tail(15)) - 0.05, max(df3['OutsideTemperature'].tail(15)) + 0.05],
                 title='<b>Temperature (°C)</b>',
                 color='#ffffff',
                 zeroline=False,
@@ -286,8 +286,8 @@ def line_chart_values(n_intervals):
 
     return {
         'data': [go.Scatter(
-            x=df3['DateTime'].head(15),
-            y=df3['OutsideHumidity'].head(15),
+            x=df3['DateTime'].tail(15),
+            y=df3['OutsideHumidity'].tail(15),
             mode='markers+lines',
             line=dict(width=3, color='#DFFF00'),
             marker=dict(size=7, symbol='circle', color='#DFFF00',
@@ -295,8 +295,8 @@ def line_chart_values(n_intervals):
                         ),
             hoverinfo='text',
             hovertext=
-            '<b>Date Time</b>: ' + df3['DateTime'].head(15).astype(str) + '<br>' +
-            '<b>Temperature (°C)</b>: ' + [f'{x:,.2f} °C' for x in df3['OutsideHumidity'].head(15)] + '<br>'
+            '<b>Date Time</b>: ' + df3['DateTime'].tail(15).astype(str) + '<br>' +
+            '<b>Temperature (°C)</b>: ' + [f'{x:,.2f} °C' for x in df3['OutsideHumidity'].tail(15)] + '<br>'
         )],
 
         'layout': go.Layout(
@@ -327,7 +327,7 @@ def line_chart_values(n_intervals):
 
             ),
 
-            yaxis=dict(range=[min(df3['OutsideHumidity'].head(15)) - 0.05, max(df3['OutsideHumidity'].head(15)) + 0.05],
+            yaxis=dict(range=[min(df3['OutsideHumidity'].tail(15)) - 0.05, max(df3['OutsideHumidity'].tail(15)) + 0.05],
                        title='<b>Humidity (%)</b>',
                        color='#ffffff',
                        zeroline=False,
@@ -365,6 +365,7 @@ def update_confirmed(n_intervals):
         html.Div('Last Date Update Time: ' + get_date,
                  className='date_format')
     ]
+
 
 if __name__ == '__main__':
     app.run_server(debug=True)
