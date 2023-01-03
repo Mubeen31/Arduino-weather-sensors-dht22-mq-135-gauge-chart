@@ -95,6 +95,7 @@ def update_confirmed(n_intervals):
     header = ['DateTime', 'InsideHumidity', 'InsideTemperature', 'InsideCO2',
               'OutsideHumidity', 'OutsideTemperature', 'OutsideCO2']
     df3 = pd.read_csv('data1.csv', names=header)
+    df3.drop_duplicates(keep=False, inplace=True)
     get_temp = df3['OutsideTemperature'].head(1).iloc[0]
 
     return {
@@ -134,6 +135,7 @@ def update_confirmed(n_intervals):
     header = ['DateTime', 'InsideHumidity', 'InsideTemperature', 'InsideCO2',
               'OutsideHumidity', 'OutsideTemperature', 'OutsideCO2']
     df3 = pd.read_csv('data1.csv', names=header)
+    df3.drop_duplicates(keep=False, inplace=True)
     get_temp = df3['OutsideTemperature'].head(1).iloc[0]
 
     return [
@@ -148,6 +150,7 @@ def update_confirmed(n_intervals):
     header = ['DateTime', 'InsideHumidity', 'InsideTemperature', 'InsideCO2',
               'OutsideHumidity', 'OutsideTemperature', 'OutsideCO2']
     df3 = pd.read_csv('data1.csv', names=header)
+    df3.drop_duplicates(keep=False, inplace=True)
     get_hum = df3['OutsideHumidity'].head(1).iloc[0]
 
     return {
@@ -187,6 +190,7 @@ def update_confirmed(n_intervals):
     header = ['DateTime', 'InsideHumidity', 'InsideTemperature', 'InsideCO2',
               'OutsideHumidity', 'OutsideTemperature', 'OutsideCO2']
     df3 = pd.read_csv('data1.csv', names=header)
+    df3.drop_duplicates(keep=False, inplace=True)
     get_hum = df3['OutsideHumidity'].head(1).iloc[0]
 
     return [
@@ -201,6 +205,7 @@ def line_chart_values(n_intervals):
     header = ['DateTime', 'InsideHumidity', 'InsideTemperature', 'InsideCO2',
               'OutsideHumidity', 'OutsideTemperature', 'OutsideCO2']
     df3 = pd.read_csv('data1.csv', names=header)
+    df3.drop_duplicates(keep=False, inplace=True)
 
     return {
         'data': [go.Scatter(
@@ -277,6 +282,7 @@ def line_chart_values(n_intervals):
     header = ['DateTime', 'InsideHumidity', 'InsideTemperature', 'InsideCO2',
               'OutsideHumidity', 'OutsideTemperature', 'OutsideCO2']
     df3 = pd.read_csv('data1.csv', names=header)
+    df3.drop_duplicates(keep=False, inplace=True)
 
     return {
         'data': [go.Scatter(
@@ -353,6 +359,7 @@ def update_confirmed(n_intervals):
               'OutsideHumidity', 'OutsideTemperature', 'OutsideCO2']
     df3 = pd.read_csv('data1.csv', names=header)
     get_date = df3['DateTime'].tail(1).iloc[0]
+    df3.drop_duplicates(keep=False, inplace=True)
 
     return [
         html.Div('Last Date Update Time: ' + get_date,
