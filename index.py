@@ -80,6 +80,7 @@ def update_confirmed(n_intervals):
     with open('data1.csv', 'a', newline='\n') as f:
         writer = csv.writer(f, delimiter=',')
         writer.writerow(df2)
+
     header = ['DateTime', 'InsideHumidity', 'InsideTemperature', 'InsideCO2',
               'OutsideHumidity', 'OutsideTemperature', 'OutsideCO2']
     df3 = pd.read_csv('data1.csv', names=header)
