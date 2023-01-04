@@ -79,24 +79,14 @@ app.layout = html.Div([
 def update_confirmed(n_intervals):
     credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
     project_id = 'weatherdata1'
-    df_sql = f"""SELECT *
+    df_sql = f"""SELECT OutsideTemperature
                      FROM
                      `weatherdata1.WeatherSensorsData1.SensorsData1`
                      ORDER BY
                      DateTime DESC LIMIT 1
                      """
     df = pd1.read_gbq(df_sql, project_id=project_id, dialect='standard', credentials=credentials)
-    df1 = df.tail(1)
-    df2 = df1.values.tolist()[0]
-    with open('data1.csv', 'a', newline='\n') as f:
-        writer = csv.writer(f, delimiter=',')
-        writer.writerow(df2)
-
-    header = ['DateTime', 'InsideHumidity', 'InsideTemperature', 'InsideCO2',
-              'OutsideHumidity', 'OutsideTemperature', 'OutsideCO2']
-    df3 = pd.read_csv('data1.csv', names=header)
-    df3.drop_duplicates(keep=False, inplace=True)
-    get_temp = df3['OutsideTemperature'].tail(1).iloc[0]
+    get_temp = df['OutsideTemperature'].head(1).iloc[0]
 
     return {
         'data': [go.Indicator(
@@ -132,11 +122,16 @@ def update_confirmed(n_intervals):
 @app.callback(Output('value1', 'children'),
               [Input('update_value', 'n_intervals')])
 def update_confirmed(n_intervals):
-    header = ['DateTime', 'InsideHumidity', 'InsideTemperature', 'InsideCO2',
-              'OutsideHumidity', 'OutsideTemperature', 'OutsideCO2']
-    df3 = pd.read_csv('data1.csv', names=header)
-    df3.drop_duplicates(keep=False, inplace=True)
-    get_temp = df3['OutsideTemperature'].tail(1).iloc[0]
+    credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
+    project_id = 'weatherdata1'
+    df_sql = f"""SELECT OutsideTemperature
+                         FROM
+                         `weatherdata1.WeatherSensorsData1.SensorsData1`
+                         ORDER BY
+                         DateTime DESC LIMIT 1
+                         """
+    df = pd1.read_gbq(df_sql, project_id=project_id, dialect='standard', credentials=credentials)
+    get_temp = df['OutsideTemperature'].head(1).iloc[0]
 
     return [
         html.Div('{0:.1f} °C'.format(get_temp),
@@ -147,11 +142,16 @@ def update_confirmed(n_intervals):
 @app.callback(Output('gauge_chart2', 'figure'),
               [Input('update_value', 'n_intervals')])
 def update_confirmed(n_intervals):
-    header = ['DateTime', 'InsideHumidity', 'InsideTemperature', 'InsideCO2',
-              'OutsideHumidity', 'OutsideTemperature', 'OutsideCO2']
-    df3 = pd.read_csv('data1.csv', names=header)
-    df3.drop_duplicates(keep=False, inplace=True)
-    get_hum = df3['OutsideHumidity'].tail(1).iloc[0]
+    credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
+    project_id = 'weatherdata1'
+    df_sql = f"""SELECT OutsideHumidity
+                         FROM
+                         `weatherdata1.WeatherSensorsData1.SensorsData1`
+                         ORDER BY
+                         DateTime DESC LIMIT 1
+                         """
+    df = pd1.read_gbq(df_sql, project_id=project_id, dialect='standard', credentials=credentials)
+    get_hum = df['OutsideHumidity'].head(1).iloc[0]
 
     return {
         'data': [go.Indicator(
@@ -187,11 +187,16 @@ def update_confirmed(n_intervals):
 @app.callback(Output('value2', 'children'),
               [Input('update_value', 'n_intervals')])
 def update_confirmed(n_intervals):
-    header = ['DateTime', 'InsideHumidity', 'InsideTemperature', 'InsideCO2',
-              'OutsideHumidity', 'OutsideTemperature', 'OutsideCO2']
-    df3 = pd.read_csv('data1.csv', names=header)
-    df3.drop_duplicates(keep=False, inplace=True)
-    get_hum = df3['OutsideHumidity'].tail(1).iloc[0]
+    credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
+    project_id = 'weatherdata1'
+    df_sql = f"""SELECT OutsideHumidity
+                             FROM
+                             `weatherdata1.WeatherSensorsData1.SensorsData1`
+                             ORDER BY
+                             DateTime DESC LIMIT 1
+                             """
+    df = pd1.read_gbq(df_sql, project_id=project_id, dialect='standard', credentials=credentials)
+    get_hum = df['OutsideHumidity'].head(1).iloc[0]
 
     return [
         html.Div('{0:.1f} %'.format(get_hum),
@@ -202,15 +207,20 @@ def update_confirmed(n_intervals):
 @app.callback(Output('line_chart1', 'figure'),
               [Input('update_value', 'n_intervals')])
 def line_chart_values(n_intervals):
-    header = ['DateTime', 'InsideHumidity', 'InsideTemperature', 'InsideCO2',
-              'OutsideHumidity', 'OutsideTemperature', 'OutsideCO2']
-    df3 = pd.read_csv('data1.csv', names=header)
-    df3.drop_duplicates(keep=False, inplace=True)
+    credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
+    project_id = 'weatherdata1'
+    df_sql = f"""SELECT DateTime, OutsideTemperature
+                             FROM
+                             `weatherdata1.WeatherSensorsData1.SensorsData1`
+                             ORDER BY
+                             DateTime DESC LIMIT 15
+                             """
+    df3 = pd1.read_gbq(df_sql, project_id=project_id, dialect='standard', credentials=credentials)
 
     return {
         'data': [go.Scatter(
-            x=df3['DateTime'].tail(15),
-            y=df3['OutsideTemperature'].tail(15),
+            x=df3['DateTime'].head(15),
+            y=df3['OutsideTemperature'].head(15),
             mode='markers+lines',
             line=dict(width=3, color='#1EEC11'),
             marker=dict(size=7, symbol='circle', color='#1EEC11',
@@ -218,8 +228,8 @@ def line_chart_values(n_intervals):
                         ),
             hoverinfo='text',
             hovertext=
-            '<b>Date Time</b>: ' + df3['DateTime'].tail(15).astype(str) + '<br>' +
-            '<b>Temperature (°C)</b>: ' + [f'{x:,.2f} °C' for x in df3['OutsideTemperature'].tail(15)] + '<br>'
+            '<b>Date Time</b>: ' + df3['DateTime'].head(15).astype(str) + '<br>' +
+            '<b>Temperature (°C)</b>: ' + [f'{x:,.2f} °C' for x in df3['OutsideTemperature'].head(15)] + '<br>'
         )],
 
         'layout': go.Layout(
@@ -251,7 +261,7 @@ def line_chart_values(n_intervals):
             ),
 
             yaxis=dict(
-                range=[min(df3['OutsideTemperature'].tail(15)) - 0.05, max(df3['OutsideTemperature'].tail(15)) + 0.05],
+                range=[min(df3['OutsideTemperature'].head(15)) - 0.05, max(df3['OutsideTemperature'].head(15)) + 0.05],
                 title='<b>Temperature (°C)</b>',
                 color='#ffffff',
                 zeroline=False,
@@ -279,15 +289,20 @@ def line_chart_values(n_intervals):
 @app.callback(Output('line_chart2', 'figure'),
               [Input('update_value', 'n_intervals')])
 def line_chart_values(n_intervals):
-    header = ['DateTime', 'InsideHumidity', 'InsideTemperature', 'InsideCO2',
-              'OutsideHumidity', 'OutsideTemperature', 'OutsideCO2']
-    df3 = pd.read_csv('data1.csv', names=header)
-    df3.drop_duplicates(keep=False, inplace=True)
+    credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
+    project_id = 'weatherdata1'
+    df_sql = f"""SELECT DateTime, OutsideHumidity
+                                 FROM
+                                 `weatherdata1.WeatherSensorsData1.SensorsData1`
+                                 ORDER BY
+                                 DateTime DESC LIMIT 15
+                                 """
+    df3 = pd1.read_gbq(df_sql, project_id=project_id, dialect='standard', credentials=credentials)
 
     return {
         'data': [go.Scatter(
-            x=df3['DateTime'].tail(15),
-            y=df3['OutsideHumidity'].tail(15),
+            x=df3['DateTime'].head(15),
+            y=df3['OutsideHumidity'].head(15),
             mode='markers+lines',
             line=dict(width=3, color='#DFFF00'),
             marker=dict(size=7, symbol='circle', color='#DFFF00',
@@ -295,8 +310,8 @@ def line_chart_values(n_intervals):
                         ),
             hoverinfo='text',
             hovertext=
-            '<b>Date Time</b>: ' + df3['DateTime'].tail(15).astype(str) + '<br>' +
-            '<b>Temperature (°C)</b>: ' + [f'{x:,.2f} °C' for x in df3['OutsideHumidity'].tail(15)] + '<br>'
+            '<b>Date Time</b>: ' + df3['DateTime'].head(15).astype(str) + '<br>' +
+            '<b>Temperature (°C)</b>: ' + [f'{x:,.2f} °C' for x in df3['OutsideHumidity'].head(15)] + '<br>'
         )],
 
         'layout': go.Layout(
@@ -327,7 +342,7 @@ def line_chart_values(n_intervals):
 
             ),
 
-            yaxis=dict(range=[min(df3['OutsideHumidity'].tail(15)) - 0.05, max(df3['OutsideHumidity'].tail(15)) + 0.05],
+            yaxis=dict(range=[min(df3['OutsideHumidity'].head(15)) - 0.05, max(df3['OutsideHumidity'].head(15)) + 0.05],
                        title='<b>Humidity (%)</b>',
                        color='#ffffff',
                        zeroline=False,
@@ -355,11 +370,16 @@ def line_chart_values(n_intervals):
 @app.callback(Output('date', 'children'),
               [Input('update_value', 'n_intervals')])
 def update_confirmed(n_intervals):
-    header = ['DateTime', 'InsideHumidity', 'InsideTemperature', 'InsideCO2',
-              'OutsideHumidity', 'OutsideTemperature', 'OutsideCO2']
-    df3 = pd.read_csv('data1.csv', names=header)
-    get_date = df3['DateTime'].tail(1).iloc[0]
-    df3.drop_duplicates(keep=False, inplace=True)
+    credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
+    project_id = 'weatherdata1'
+    df_sql = f"""SELECT DateTime
+                                 FROM
+                                 `weatherdata1.WeatherSensorsData1.SensorsData1`
+                                 ORDER BY
+                                 DateTime DESC LIMIT 1
+                                 """
+    df3 = pd1.read_gbq(df_sql, project_id=project_id, dialect='standard', credentials=credentials)
+    get_date = df3['DateTime'].head(1).iloc[0]
 
     return [
         html.Div('Last Date Update Time: ' + get_date,
