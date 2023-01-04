@@ -6,7 +6,6 @@ from dash.dependencies import Input, Output
 from google.oauth2 import service_account
 import pandas_gbq as pd1
 import plotly.graph_objs as go
-import csv
 import dash_bootstrap_components as dbc
 
 app = dash.Dash(__name__, )
